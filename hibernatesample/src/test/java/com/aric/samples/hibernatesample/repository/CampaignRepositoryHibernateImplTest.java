@@ -19,6 +19,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.mock.jndi.SimpleNamingContextBuilder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -88,7 +89,8 @@ public class CampaignRepositoryHibernateImplTest {
 	}
 
 	@Autowired
-	CampaignRepository repository;
+	@Qualifier("campaignRespositoryHibernate")
+	private CampaignRepository repository;
 
 	/**
 	 * Test method for
@@ -106,7 +108,7 @@ public class CampaignRepositoryHibernateImplTest {
 			repository.saveCampaign(campaign);
 		}
 		long endTime = System.currentTimeMillis();
-		System.out.println(endTime - startTime);
+		System.out.println("hibernate-save: "+(endTime - startTime));
 	}
 
 	/**
@@ -122,7 +124,7 @@ public class CampaignRepositoryHibernateImplTest {
 			repository.loadCampaign(l);
 		}
 		long endTime = System.currentTimeMillis();
-		System.out.println(endTime - startTime);
+		System.out.println("hibernate-load: "+(endTime - startTime));
 	}
 
 }

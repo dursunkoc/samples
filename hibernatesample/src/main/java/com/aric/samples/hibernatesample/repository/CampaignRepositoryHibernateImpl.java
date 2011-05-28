@@ -19,7 +19,7 @@ import com.aric.samples.hibernatesample.exceptions.TooManyRecordsFound;
  * @author Dursun KOC
  * 
  */
-@Repository
+@Repository("campaignRespositoryHibernate")
 public class CampaignRepositoryHibernateImpl extends HibernateDaoSupport implements
 		CampaignRepository {
 

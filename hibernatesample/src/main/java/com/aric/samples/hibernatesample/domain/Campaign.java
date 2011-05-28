@@ -3,6 +3,7 @@
  */
 package com.aric.samples.hibernatesample.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -18,7 +19,11 @@ import javax.persistence.Table;
  */
 @Entity
 @Table
-public class Campaign {
+public class Campaign implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4854598738398192956L;
 	@Id
 	@Column
 	@GeneratedValue(strategy = GenerationType.AUTO)

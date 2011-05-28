@@ -4,6 +4,7 @@
 package com.aric.samples.hibernatesample.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.aric.samples.hibernatesample.domain.Campaign;
@@ -16,6 +17,7 @@ import com.aric.samples.hibernatesample.repository.CampaignRepository;
 @Service
 public class CampaignServiceImpl implements CampaignService {
 	@Autowired
+	@Qualifier("campaignRespositoryHibernate")
 	private CampaignRepository repository;
 
 	/**
