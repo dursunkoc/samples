@@ -17,7 +17,7 @@ import com.aric.samples.hibernatesample.repository.CampaignRepository;
 @Service
 public class CampaignServiceImpl implements CampaignService {
 	@Autowired
-	@Qualifier("campaignRespositoryHibernate")
+	@Qualifier("campaignRepositoryHibernate")
 	private CampaignRepository repository;
 
 	/**

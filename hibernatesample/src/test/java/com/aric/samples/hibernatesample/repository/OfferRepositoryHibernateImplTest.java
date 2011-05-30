@@ -1,11 +1,13 @@
-/**
- * 
- */
 package com.aric.samples.hibernatesample.repository;
 
+import static org.junit.Assert.fail;
+
 import java.util.Date;
+import java.util.Set;
 
 import javax.sql.DataSource;
+
+import junit.framework.Assert;
 
 import org.apache.commons.dbcp.ConnectionFactory;
 import org.apache.commons.dbcp.DriverManagerConnectionFactory;
@@ -21,10 +23,12 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.mock.jndi.SimpleNamingContextBuilder;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.aric.samples.hibernatesample.domain.Campaign;
+import com.aric.samples.hibernatesample.domain.Offer;
 
 /**
  * @author Dursun KOC
@@ -32,7 +36,8 @@ import com.aric.samples.hibernatesample.domain.Campaign;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:applicationContext.xml")
-public class CampaignRepositoryHibernateImplTest {
+public class OfferRepositoryHibernateImplTest {
+
 	public static DataSource dataSource = setupDataSource();
 
 	private static DataSource setupDataSource() {
@@ -89,64 +94,42 @@ public class CampaignRepositoryHibernateImplTest {
 	}
 
 	@Autowired
+	@Qualifier("offerRepositoryHibernate")
+	private OfferRepository repository;
+
+	@Autowired
 	@Qualifier("campaignRepositoryHibernate")
-	private CampaignRepository repository;
+	private CampaignRepository campaignRepository;
 
-	/**
-	 * Test method for
-	 * {@link com.aric.samples.hibernatesample.repository.CampaignRepositoryHibernateImpl#saveCampaign(com.aric.samples.hibernatesample.domain.Campaign)}
-	 * .
-	 */
 	@Test
-	public void testSaveCampaign() {
-		long startTime = System.currentTimeMillis();
-		for (int i = 0; i < 10000; i++) {
-			Campaign campaign = new Campaign();
-			campaign.setEndDate(new Date());
-			campaign.setStartDate(new Date());
-			campaign.setName("campaign-" + i);
-			repository.saveCampaign(campaign);
-		}
-		long endTime = System.currentTimeMillis();
-		System.out.println("hibernate-save: " + (endTime - startTime) + "==>"
-				+ ((endTime - startTime) / 1000));
+	@Rollback(true)
+	public void testSaveOffer() {
+		Offer offer = new Offer();
+		offer.setEndDate(new Date());
+		offer.setStartDate(new Date());
+		offer.setName("my - offer");
+		Campaign campaign = campaignRepository.loadCampaign(1L);
+		offer.setCampaign(campaign);
+		repository.saveOffer(offer);
 	}
 
-	/**
-	 * Test method for
-	 * {@link com.aric.samples.hibernatesample.repository.CampaignRepositoryHibernateImpl#loadCampaign(java.lang.Long)}
-	 * .
-	 */
 	@Test
-	public void testLoadCampaign() {
-		long startTime = System.currentTimeMillis();
-		for (int i = 0; i < 10000; i++) {
-			long l = i + 1L;
-			repository.loadCampaign(l);
-		}
-		long endTime = System.currentTimeMillis();
-		System.out.println("hibernate-load: " + (endTime - startTime) + "==>"
-				+ ((endTime - startTime) / 1000));
+	public void testUpdateOffer() {
+		fail("Not yet implemented");
 	}
 
-	/**
-	 * Test method for
-	 * {@link com.aric.samples.hibernatesample.repository.CampaignRepositoryHibernateImpl#updateCampaign(Campaign)}
-	 * .
-	 */
 	@Test
-	public void testUpdateCampaign() {
-		long startTime = System.currentTimeMillis();
-		for (int i = 0; i < 10000; i++) {
-			long l = i + 1L;
-			Campaign campaign = repository.loadCampaign(l);
-			String newName = campaign.getName() + "updated.";
-			campaign.setName(newName.substring(0,
-					Math.min(255, newName.length())));
-			repository.updateCampaign(campaign);
+	public void testLoadOffer() {
+		Campaign loadCampaign = campaignRepository.loadCampaign(1L);
+		Set<Offer> offers = loadCampaign.getOffers();
+		for (Offer offer : offers) {
+			System.out.println(offer.getName());
+			System.out.println(offer.getEndDate());
+			System.out.println(offer.getStartDate());
+			System.out.println(offer.getId());
+			System.out.println("===================================");
 		}
-		long endTime = System.currentTimeMillis();
-		System.out.println("hibernate-update: " + (endTime - startTime) + "==>"
-				+ ((endTime - startTime) / 1000));
+		Assert.assertTrue(offers.size() > 0);
 	}
+
 }

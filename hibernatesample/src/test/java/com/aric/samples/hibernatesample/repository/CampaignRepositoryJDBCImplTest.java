@@ -32,7 +32,7 @@ import com.aric.samples.hibernatesample.domain.Campaign;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:applicationContext.xml")
-public class CampaignRepositoryHibernateImplTest {
+public class CampaignRepositoryJDBCImplTest {
 	public static DataSource dataSource = setupDataSource();
 
 	private static DataSource setupDataSource() {
@@ -89,12 +89,12 @@ public class CampaignRepositoryHibernateImplTest {
 	}
 
 	@Autowired
-	@Qualifier("campaignRepositoryHibernate")
+	@Qualifier("campaignRepositoryJdbc")
 	private CampaignRepository repository;
 
 	/**
 	 * Test method for
-	 * {@link com.aric.samples.hibernatesample.repository.CampaignRepositoryHibernateImpl#saveCampaign(com.aric.samples.hibernatesample.domain.Campaign)}
+	 * {@link com.aric.samples.hibernatesample.repository.CampaignRepositoryJDBCImpl#saveCampaign(com.aric.samples.hibernatesample.domain.Campaign)}
 	 * .
 	 */
 	@Test
@@ -108,13 +108,13 @@ public class CampaignRepositoryHibernateImplTest {
 			repository.saveCampaign(campaign);
 		}
 		long endTime = System.currentTimeMillis();
-		System.out.println("hibernate-save: " + (endTime - startTime) + "==>"
+		System.out.println("jdbc-save: " + (endTime - startTime) + "==>"
 				+ ((endTime - startTime) / 1000));
 	}
 
 	/**
 	 * Test method for
-	 * {@link com.aric.samples.hibernatesample.repository.CampaignRepositoryHibernateImpl#loadCampaign(java.lang.Long)}
+	 * {@link com.aric.samples.hibernatesample.repository.CampaignRepositoryJDBCImpl#loadCampaign(java.lang.Long)}
 	 * .
 	 */
 	@Test
@@ -125,7 +125,7 @@ public class CampaignRepositoryHibernateImplTest {
 			repository.loadCampaign(l);
 		}
 		long endTime = System.currentTimeMillis();
-		System.out.println("hibernate-load: " + (endTime - startTime) + "==>"
+		System.out.println("jdbc-load: " + (endTime - startTime) + "==>"
 				+ ((endTime - startTime) / 1000));
 	}
 
@@ -146,7 +146,8 @@ public class CampaignRepositoryHibernateImplTest {
 			repository.updateCampaign(campaign);
 		}
 		long endTime = System.currentTimeMillis();
-		System.out.println("hibernate-update: " + (endTime - startTime) + "==>"
+		System.out.println("jdbc-update: " + (endTime - startTime) + "==>"
 				+ ((endTime - startTime) / 1000));
 	}
+
 }

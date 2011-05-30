@@ -8,6 +8,7 @@ import java.util.List;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Property;
+import org.hibernate.transform.DistinctRootEntityResultTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
@@ -19,9 +20,9 @@ import com.aric.samples.hibernatesample.exceptions.TooManyRecordsFound;
  * @author Dursun KOC
  * 
  */
-@Repository("campaignRespositoryHibernate")
-public class CampaignRepositoryHibernateImpl extends HibernateDaoSupport implements
-		CampaignRepository {
+@Repository("campaignRepositoryHibernate")
+public class CampaignRepositoryHibernateImpl extends HibernateDaoSupport
+		implements CampaignRepository {
 
 	@Autowired
 	public void init(SessionFactory factory) {
@@ -44,6 +45,7 @@ public class CampaignRepositoryHibernateImpl extends HibernateDaoSupport impleme
 	@Override
 	public Campaign loadCampaign(Long id) {
 		DetachedCriteria criteria = DetachedCriteria.forClass(Campaign.class);
+		criteria.setResultTransformer(DistinctRootEntityResultTransformer.INSTANCE);
 		criteria.add(Property.forName("id").eq(id));
 		return (Campaign) exactOneRecord(criteria);
 	}
@@ -62,6 +64,19 @@ public class CampaignRepositoryHibernateImpl extends HibernateDaoSupport impleme
 			throw new TooManyRecordsFound("excepted 1 record got "
 					+ result.size() + " for criteria:(" + criteria + ")");
 		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.aric.samples.hibernatesample.repository.CampaignRepository#updateCampaign
+	 * (com.aric.samples.hibernatesample.domain.Campaign)
+	 */
+	@Override
+	public Long updateCampaign(Campaign campaign) {
+		getHibernateTemplate().update(campaign);
+		return campaign.getId();
 	}
 
 }

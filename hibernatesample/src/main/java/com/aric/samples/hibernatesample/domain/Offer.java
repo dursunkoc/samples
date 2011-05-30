@@ -3,17 +3,15 @@
  */
 package com.aric.samples.hibernatesample.domain;
 
-import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -22,14 +20,10 @@ import javax.persistence.Table;
  */
 @Entity
 @Table
-public class Campaign implements Serializable{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4854598738398192956L;
+public class Offer {
 	@Id
 	@Column
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	@Column
 	private String name;
@@ -37,8 +31,9 @@ public class Campaign implements Serializable{
 	private Date startDate;
 	@Column
 	private Date endDate;
-	@OneToMany(mappedBy="campaign",targetEntity=Offer.class,fetch=FetchType.EAGER)
-	private Set<Offer> offers;
+	@ManyToOne()
+	@JoinColumn(name = "campaignId")
+	private Campaign campaign;
 
 	/**
 	 * @return the id
@@ -101,17 +96,18 @@ public class Campaign implements Serializable{
 	}
 
 	/**
-	 * @return the offers
+	 * @return the campaign
 	 */
-	public Set<Offer> getOffers() {
-		return offers;
+	public Campaign getCampaign() {
+		return campaign;
 	}
 
 	/**
-	 * @param offers the offers to set
+	 * @param campaign
+	 *            the campaign to set
 	 */
-	public void setOffers(Set<Offer> offers) {
-		this.offers = offers;
+	public void setCampaign(Campaign campaign) {
+		this.campaign = campaign;
 	}
 
 }
