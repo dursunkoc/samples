@@ -36,7 +36,7 @@ public class CampaignRepositoryHibernateImplTest {
 	public static DataSource dataSource = setupDataSource();
 
 	private static DataSource setupDataSource() {
-		String connectURI = "jdbc:mysql://localhost:3306/tomcat";
+		String connectURI = "jdbc:mysql://10.10.12.95:3306/tomcat";
 		String user = "tomcat";
 		String password = "42414241";
 		String driverName = "com.mysql.jdbc.Driver";
